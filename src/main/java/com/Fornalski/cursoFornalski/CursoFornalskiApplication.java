@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.Fornalski.cursoFornalski.domain.Categoria;
 import com.Fornalski.cursoFornalski.domain.Cidade;
+import com.Fornalski.cursoFornalski.domain.Cliente;
+import com.Fornalski.cursoFornalski.domain.Endereco;
 import com.Fornalski.cursoFornalski.domain.Estado;
 import com.Fornalski.cursoFornalski.domain.Produto;
+import com.Fornalski.cursoFornalski.domain.enums.TipoCliente;
 import com.Fornalski.cursoFornalski.repositories.CategoriaRepository;
 import com.Fornalski.cursoFornalski.repositories.CidadeRepository;
+import com.Fornalski.cursoFornalski.repositories.ClienteRepository;
+import com.Fornalski.cursoFornalski.repositories.EnderecoRepository;
 import com.Fornalski.cursoFornalski.repositories.EstadoRepository;
 import com.Fornalski.cursoFornalski.repositories.ProdutoRepository;
 
@@ -30,6 +35,12 @@ public class CursoFornalskiApplication implements CommandLineRunner{
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursoFornalskiApplication.class, args);
@@ -59,8 +70,8 @@ public class CursoFornalskiApplication implements CommandLineRunner{
 		
 		
 /*RELACIONAMENTO DE ESTADOS E CIDADES*/		
-		Estado est1 = new Estado (null, "São Paulo");
-		Estado est2 = new Estado (null, "Minas Gerais");
+		Estado est1 = new Estado (null, "Minas Gerais");
+		Estado est2 = new Estado (null, "São Paulo");
 		
 		Cidade c1 = new Cidade(null,"Uberlandia",est2);
 		Cidade c2 = new Cidade(null,"São Paulo", est1);
@@ -72,6 +83,22 @@ public class CursoFornalskiApplication implements CommandLineRunner{
 		
 		estadoRepository.save(Arrays.asList(est1, est2));
 		cidadeRepository.save(Arrays.asList(c1, c2, c3));
+
+
+		/*Macete para adicionar na lista*/
+		Cliente cli1 = new Cliente (null, "Maria Silva", "maria@gmail.com", "23845646750",TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("34361999","991163576"));
+		
+		Endereco end1 = new Endereco(null,"Rua Flores","300","Apto 203","Jardim","94420110",cli1, c1);
+		Endereco end2 = new Endereco(null,"Avenida Matos","105","Sala 800","Centro","94867300",cli1, c2);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(end1, end2));
+		
+		clienteRepository.save(Arrays.asList(cli1));
+		enderecoRepository.save(Arrays.asList(end1,end2));
+		
+		
+		
 	}
 
 	
