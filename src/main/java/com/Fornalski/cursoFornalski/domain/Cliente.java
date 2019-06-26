@@ -12,15 +12,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import com.Fornalski.cursoFornalski.domain.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-public class Cliente implements Serializable{
+public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -28,19 +29,22 @@ public class Cliente implements Serializable{
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipo;
-	
-	@JsonManagedReference/*essa anotação libera a serialização na classe Endereco*/
+
+	@JsonManagedReference /* essa anotação libera a serialização na classe Endereco */
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
-	
-	/*Set de strings, garante que nao tem repetição*/
-	/*representando os telefones por um consjunto de strings*/
+
+	/* Set de strings, garante que nao tem repetição */
+	/* representando os telefones por um consjunto de strings */
 	@ElementCollection
 	@CollectionTable(name = "TELEFONE")
 	private Set<String> telefones = new HashSet<>();
-	
+
+	@OneToMany(mappedBy = "cliente")
+	private List<Pedido> pedidos = new ArrayList<>();
+
 	public Cliente() {
-		
+
 	}
 
 	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
@@ -84,8 +88,10 @@ public class Cliente implements Serializable{
 		this.cpfOuCnpj = cpfOuCnpj;
 	}
 
-	/*macete para enumerar um numero inteiro criado no pacote domain.enum-utilizando "if" e 
-	 * laço "for" */
+	/*
+	 * macete para enumerar um numero inteiro criado no pacote
+	 * domain.enum-utilizando "if" e laço "for"
+	 */
 	public TipoCliente getTipo() {
 		return TipoCliente.toEnum(tipo);
 	}
@@ -108,6 +114,14 @@ public class Cliente implements Serializable{
 
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	@Override
@@ -134,6 +148,5 @@ public class Cliente implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
 }

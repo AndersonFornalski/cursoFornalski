@@ -1,5 +1,6 @@
 package com.Fornalski.cursoFornalski;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.Fornalski.cursoFornalski.domain.Cidade;
 import com.Fornalski.cursoFornalski.domain.Cliente;
 import com.Fornalski.cursoFornalski.domain.Endereco;
 import com.Fornalski.cursoFornalski.domain.Estado;
+import com.Fornalski.cursoFornalski.domain.Pagamento;
+import com.Fornalski.cursoFornalski.domain.PagamentoComBoleto;
+import com.Fornalski.cursoFornalski.domain.PagamentoComCartao;
+import com.Fornalski.cursoFornalski.domain.Pedido;
 import com.Fornalski.cursoFornalski.domain.Produto;
+import com.Fornalski.cursoFornalski.domain.enums.EstadoPagamento;
 import com.Fornalski.cursoFornalski.domain.enums.TipoCliente;
 import com.Fornalski.cursoFornalski.repositories.CategoriaRepository;
 import com.Fornalski.cursoFornalski.repositories.CidadeRepository;
 import com.Fornalski.cursoFornalski.repositories.ClienteRepository;
 import com.Fornalski.cursoFornalski.repositories.EnderecoRepository;
 import com.Fornalski.cursoFornalski.repositories.EstadoRepository;
+import com.Fornalski.cursoFornalski.repositories.PagamentoRepository;
+import com.Fornalski.cursoFornalski.repositories.PedidoRepository;
 import com.Fornalski.cursoFornalski.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -41,6 +49,13 @@ public class CursoFornalskiApplication implements CommandLineRunner{
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursoFornalskiApplication.class, args);
@@ -97,7 +112,22 @@ public class CursoFornalskiApplication implements CommandLineRunner{
 		clienteRepository.save(Arrays.asList(cli1));
 		enderecoRepository.save(Arrays.asList(end1,end2));
 		
+		/*Macete para adicionar na lista*/		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");  /*Mascara de formatação, instanciando data(-instante-)*/
 		
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, end1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, end2);
+		
+		Pagamento pag1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pag1);
+		
+		Pagamento pag2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse(" 20/10/2017 00:00 "), null);
+		ped2.setPagamento(pag2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		pedidoRepository.save(Arrays.asList(ped1, ped2));
+		pagamentoRepository.save(Arrays.asList(pag1, pag2));
 		
 	}
 
