@@ -13,6 +13,7 @@ import com.Fornalski.cursoFornalski.domain.Cidade;
 import com.Fornalski.cursoFornalski.domain.Cliente;
 import com.Fornalski.cursoFornalski.domain.Endereco;
 import com.Fornalski.cursoFornalski.domain.Estado;
+import com.Fornalski.cursoFornalski.domain.ItemPedido;
 import com.Fornalski.cursoFornalski.domain.Pagamento;
 import com.Fornalski.cursoFornalski.domain.PagamentoComBoleto;
 import com.Fornalski.cursoFornalski.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.Fornalski.cursoFornalski.repositories.CidadeRepository;
 import com.Fornalski.cursoFornalski.repositories.ClienteRepository;
 import com.Fornalski.cursoFornalski.repositories.EnderecoRepository;
 import com.Fornalski.cursoFornalski.repositories.EstadoRepository;
+import com.Fornalski.cursoFornalski.repositories.ItemPedidoRepository;
 import com.Fornalski.cursoFornalski.repositories.PagamentoRepository;
 import com.Fornalski.cursoFornalski.repositories.PedidoRepository;
 import com.Fornalski.cursoFornalski.repositories.ProdutoRepository;
@@ -55,6 +57,9 @@ public class CursoFornalskiApplication implements CommandLineRunner{
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	
 	public static void main(String[] args) {
@@ -128,6 +133,20 @@ public class CursoFornalskiApplication implements CommandLineRunner{
 		
 		pedidoRepository.save(Arrays.asList(ped1, ped2));
 		pagamentoRepository.save(Arrays.asList(pag1, pag2));
+		
+		/*Macete para adicionar na lista*/	
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2)); 
+		
+		itemPedidoRepository.save(Arrays.asList(ip1, ip2, ip3));
 		
 	}
 
