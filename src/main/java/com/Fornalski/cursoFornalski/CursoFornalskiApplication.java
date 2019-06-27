@@ -118,7 +118,7 @@ public class CursoFornalskiApplication implements CommandLineRunner{
 		enderecoRepository.save(Arrays.asList(end1,end2));
 		
 		/*Macete para adicionar na lista*/		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");  /*Mascara de formatação, instanciando data(-instante-)*/
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");  /*Mascara de formatação, instanciando data(-instante-)*/
 		
 		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, end1);
 		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, end2);
