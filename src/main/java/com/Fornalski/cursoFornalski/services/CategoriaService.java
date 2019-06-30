@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.Fornalski.cursoFornalski.domain.Categoria;
+import com.Fornalski.cursoFornalski.dto.CategoriaDTO;
 import com.Fornalski.cursoFornalski.repositories.CategoriaRepository;
 import com.Fornalski.cursoFornalski.services.exceptions.DataIntegrityException;
 import com.Fornalski.cursoFornalski.services.exceptions.ObjectNotFoundException;
@@ -56,6 +57,10 @@ public class CategoriaService {
 	public Page<Categoria> findPage(Integer Page, Integer linesPerPage, String orderBy, String direction ){
 		PageRequest pageRequest = new PageRequest(Page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
+	}
+	/*Método auxiliar que instância uma Categoria apartir de um DTO*/
+	public Categoria fromDTO(CategoriaDTO objDto) {
+		return new Categoria(objDto.getId(), objDto.getNome()); 
 	}
 }
 
